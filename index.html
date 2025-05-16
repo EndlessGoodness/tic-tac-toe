@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .gameboard{
+            display: grid;
+            grid-template-columns: 120px 120px 120px;
+            grid-template-rows: 120px 120px 120px;
+            justify-content: center;   
+            margin:0;        
+        }
+        .box{
+            background-color: #ffffff;
+            border: 2px solid #0e0101;
+            background-image: url();
+            background-size: cover;
+        }
+        .box:hover{
+            background-color: #75ede9;
+            cursor: pointer;
+        }
+    </style>
+    <title>Tic-Tac-Toe</title>
+</head>
+<body>
+    <h1 style= "text-align: center" >Tic-Tac-Toe</h1>
+    <div class="gameboard">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <script>
+            let turn=0;
+            document.querySelectorAll('.box').forEach(box => {
+                box.addEventListener('click', function() {
+                    if(!this.style.backgroundImage){
+                        if(turn==0){
+                        this.style.backgroundImage = 'url("cross.png")';
+                    }else{
+                        this.style.backgroundImage = 'url("gola.png")';
+                    }
+                    turn=1-turn;  
+                }                  
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>
