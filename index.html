@@ -4,28 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        .gameboard{
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-image: url('page-bg.jpg');
+            background-size: cover;
+        }
+        .gameboard {
             display: grid;
             grid-template-columns: 120px 120px 120px;
             grid-template-rows: 120px 120px 120px;
-            justify-content: center;   
-            margin:0;        
+            justify-content: center;
+            margin-top: 15px;
+            place-content: center;
+            margin-left: auto;
+            margin-right: auto;
         }
         .box{
             background-color: #ffffff;
             border: 2px solid #0e0101;
             background-image: url();
             background-size: cover;
+            font-size: 0;
         }
         .box:hover{
             background-color: #75ede9;
             cursor: pointer;
         }
+        header{
+            font-family: 'Courier New', Courier, monospace;
+            color:white;
+            padding: 0px;
+        }
+        
     </style>
+    <link rel="stylesheet" href="sty.css">
+    <link rel="stylesheet" href="input.css">
     <title>Tic-Tac-Toe</title>
 </head>
 <body>
-    <h1 style= "text-align: center" >Tic-Tac-Toe</h1>
+    <header> 
+        <h1 style="text-align: center ;background-image: url(header_image.jpeg)">Tic-Tac-Toe </h1>
+    </header>
     <div class="gameboard">
         <div class="box"></div>
         <div class="box"></div>
@@ -36,21 +56,103 @@
         <div class="box"></div>
         <div class="box"></div>
         <div class="box"></div>
-        <script>
-            let turn=0;
-            document.querySelectorAll('.box').forEach(box => {
-                box.addEventListener('click', function() {
-                    if(!this.style.backgroundImage){
-                        if(turn==0){
-                        this.style.backgroundImage = 'url("cross.png")';
-                    }else{
-                        this.style.backgroundImage = 'url("gola.png")';
-                    }
-                    turn=1-turn;  
-                }                  
-                });
-            });
-        </script>
+    </div>  
+
+    <button class="button-30" id="reset" >Restart</button>
+    
+    <div class="container">
+        <div class="input-group">
+            <input required type="text" name="player1" class="input" id="player1">
+            <label class="label" for="player1">Enter Player 1 Name</label>
+        </div>
+        <div class="input-group">
+            <input required type="text" name="player2" class="input" id="player2">
+            <label class="label" for="player2">Enter Player 2 Name</label>
+        </div>
     </div>
+    
+    <script>
+        const squares = document.getElementsByClassName('box')
+        const msg= document.createElement('h1')
+        msg.style.textAlign = "center";
+        msg.style.color = "white";
+        let turn=0;
+            
+        const winning_combinations = [
+            [0, 1, 2],
+            [0, 3, 6],
+            [0, 4, 8],
+            [1, 4, 7],
+            [2, 5, 8],
+            [2, 4, 6],
+            [3, 4, 5],
+            [6, 7, 8]
+        ];
+
+        const player1Input = document.getElementById('player1');
+        const player2Input = document.getElementById('player2');
+
+        document.querySelectorAll('.box').forEach(box => {
+            box.addEventListener('click', function() {
+                if(!this.style.backgroundImage){
+                    if(turn==0){
+                        this.textContent = "1";
+                        this.style.backgroundImage = 'url("cross.png")';
+                        turn=1-turn;
+                        if(checkWin("1")){
+                            const name = player1Input.value || "Player X";
+                            msg.textContent = `${name} is the winner`;
+                            document.body.appendChild(msg);
+                        }else if(checkTie("1")){
+                            msg.textContent="The game is a tie";
+                            document.body.appendChild(msg);
+                        };
+                    }else{
+                        this.textContent = "0";
+                        this.style.backgroundImage = 'url("gola.png")';
+                        turn=1-turn;
+                        if(checkWin("0")){
+                            const name = player2Input.value || "Player O";
+                            msg.textContent = `${name} is the winner`;
+                            document.body.appendChild(msg);
+                        }else if(checkTie("0")){
+                            msg.textContent="The game is a tie";
+                            document.body.appendChild(msg);
+                        };
+                    }
+                }                  
+            });
+        });
+
+        function checkWin(str) {
+            for(let i = 0; i < winning_combinations.length; i++){
+                const [a, b, c] = winning_combinations[i]
+                if(squares[a].textContent === str && squares[b].textContent === str && squares[c].textContent === str){
+                    return true
+                }
+            }
+            return false
+        }
+        function checkTie(){
+            for(let i = 0; i < squares.length; i++) {
+                if(squares[i].textContent === '') {
+                    return false;
+                }
+            }
+            return true
+        }
+        document.getElementById('reset').addEventListener('click',()=>{
+            for(let i=0;i<squares.length;i++){
+                squares[i].style.backgroundImage = '';
+                squares[i].textContent = '';
+            }
+            turn=0;
+            if(msg.parentNode){
+                msg.parentNode.removeChild(msg);
+            }
+        });
+    </script>
+        
+    
 </body>
 </html>
